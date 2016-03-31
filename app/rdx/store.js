@@ -1,17 +1,16 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import * as reducers from './reducers'
-import { syncHistory, routeReducer } from 'react-router-redux'
-import { hashHistory } from 'react-router'
+// ./store.js
+import { createStore, combineReducers } from 'redux'
+import { modelReducer, formReducer } from 'react-redux-form'
 
-const reduxRouterMiddleware = syncHistory(hashHistory)
+const initialUserState = {
+  firstName: 'Bret',
+  lastName: 'Comnes'
+}
 
-const reducer = combineReducers({
-  ...reducers,
-  routing: routeReducer
-})
-
-const createStoreWithMiddleware = applyMiddleware(reduxRouterMiddleware)(createStore)
-const store = createStoreWithMiddleware(reducer)
+const store = createStore(combineReducers({
+  user: modelReducer('user', initialUserState),
+  userForm: formReducer('user')
+}))
 
 window.peakState = () => store.getState()
 
